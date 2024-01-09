@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Main page</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <!-- Chart.js import -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	
+	<!-- GWTSwing import
+		/******** IMPORTANT ********/
+	-->
+	<link href="./de/exware/gwtswing/gwtswing.css" rel="stylesheet">
+	
+	<style>
+		body {
+			margin: 0px;
+			padding: 0px;
+			/*disable text selection because of gwtswing*/
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+	</style>
+  </head>
+  <body>
+	<!-- import TeaVM -->
+	<script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
+	<script>
+		//run TeaVM
+		main();
+	</script>
+  </body>
+</html>
