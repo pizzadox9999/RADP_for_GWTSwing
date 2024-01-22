@@ -8,8 +8,6 @@ import org.teavm.jso.JSBody;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
-import org.teavm.jso.dom.html.HTMLBodyElement;
-import org.teavm.jso.dom.xml.Document;
 
 import de.exware.gplatform.GPElement;
 import de.exware.gplatform.GPlatform;
@@ -21,7 +19,6 @@ import de.exware.gwtswing.swing.GComponent;
 import de.exware.gwtswing.swing.GLabel;
 import de.exware.gwtswing.swing.GPanel;
 import de.exware.gwtswing.swing.GUtilities;
-import gwtswing.bits.VerticalFlowLayout;
 
 /**
  * Application sets up the views and controllers
@@ -61,7 +58,6 @@ public abstract class Application {
     }
 
     public static void setView(View view) {
-        
         if(currentActiveView != null) {
             Window.current().getDocument().removeChild(((TeavmGPElement) currentActiveView.getComponent().getPeer()).getNativeElement());
         }
