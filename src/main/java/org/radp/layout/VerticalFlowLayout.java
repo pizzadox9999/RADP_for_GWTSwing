@@ -1,4 +1,4 @@
-package org.radp;
+package org.radp.layout;
 
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GInsets;

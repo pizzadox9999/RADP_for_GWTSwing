@@ -24,6 +24,10 @@
 
 .gwts-GComboBox select {
 	width: inherit;
+	border-radius: 5px;
+	border-width: 1px;
+	border-color: #555555;
+	border-style: solid;
 }
 
 img.disabled {
@@ -175,10 +179,18 @@ input {
 	border-width: 1px;
 	border-color: #555555;
 	border-style: solid;
+	border-radius: 5px;
 	resize: none;
 	padding: 2px;
 	background-color: #ffffff;
 	overflow: initial;
+}
+
+.gwts-GScrollPane {
+	border-radius: 5px;
+	border-width: 1px;
+	border-color: #555555;
+	border-style: solid;
 }
 
 .gwts-GScrollPane-Viewport {
@@ -186,6 +198,7 @@ input {
 	position: absolute;
 	display: inline;
 }
+
 .gwts-GList {
 	background-color: #eeeecc;
 	overflow: hidden;
@@ -236,25 +249,29 @@ input {
 	color: #999999;
 }
 
-/*
- * My own modifications
- */
-
-.gwts-LoadingCircleSpinner {
-	width: 50px;
-  	padding: 8px;
-  	border-radius: 50%;
-  	background: #808000;
-  	aspect-ratio: 1;
-  	
-  	--_m: 
-    	conic-gradient(#0000 10%,#000),
-    	linear-gradient(#000 0 0) content-box;
-  	-webkit-mask: var(--_m);
-    	    mask: var(--_m);
-  	-webkit-mask-composite: source-out;
-    	    mask-composite: subtract;
-  	animation: l3 1s infinite linear;
+@keyframes fadeIn {
+	0% {opacity: 0;	}
+	100% {opacity: 1; }
 }
 
-@keyframes l3 {to{transform: rotate(1turn)}}
+@keyframes fadeOut {
+	0% {opacity: 1; }
+	100% {opacity: 0; }
+}
+
+@keyframes expandHorizontal {
+	0% {width: 0px;	}
+	100% {}
+}
+
+.gwts-animation-fadeIn {
+    animation: fadeIn;
+}
+
+.gwts-animation-fadeOut {
+    animation: fadeOut;
+}
+
+.gwts-animation-expandHorizontal {
+    animation: expandHorizontal;
+}
