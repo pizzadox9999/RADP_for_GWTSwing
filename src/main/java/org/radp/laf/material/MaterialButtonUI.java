@@ -19,6 +19,7 @@ public class MaterialButtonUI extends ComponentUI {
 	public static final String MATERIAL_CONTAINED = "MATERIAL_CONTAINED";
 	public static final String MATERIAL_OUTLINED = "MATERIAL_OUTLINED";
 	public static final String MATERIAL_TEXT = "MATERIAL_TEXT";
+	public static final String MATERIAL_EFFECTS = "MATERIAL_EFFECTS";
 
 	// this ui needs a new instance for every button
 	// to support a different color on each button
@@ -91,8 +92,12 @@ public class MaterialButtonUI extends ComponentUI {
 				component.setBackground(backgroundColorMouseOver);
 			}
 		};
-
-		component.addMouseListener(mouseListener);
+		
+		Boolean materialEffects = (Boolean) component.getClientProperty(MATERIAL_EFFECTS);
+		
+		if( materialEffects == null || materialEffects ) {
+			component.addMouseListener(mouseListener);
+		}
 
 		// assume it is a button and
 		// take text and upper case it
