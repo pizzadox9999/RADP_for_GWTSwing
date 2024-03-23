@@ -8,17 +8,15 @@ import de.exware.gplatform.GPElement;
 import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GToolkit;
-import de.exware.gwtswing.swing.GComponent;
-import de.exware.gwtswing.swing.GFrame;
 import de.exware.gwtswing.swing.GPanel;
 import de.exware.gwtswing.swing.GUtilities;
 
 abstract public class Application extends GPanel {
-	protected WindowSizeClasses windowSizeClasse;
+	protected WindowSizeClasses windowSizeClass;
 	protected WindowSizeClassManager windowSizeClassManager;
 	
-	protected Navbar navbar;
-	protected NavbarManager navbarManager;
+	protected View view;
+	protected ViewManager viewManager;
 	
 	protected ResizeEventListener resizeEventListener;
 	
@@ -33,7 +31,7 @@ abstract public class Application extends GPanel {
 			public void resized(ResizeEvent resizeEvent) {
 				applicationSize = resizeEvent.newDimension;
 				updateWindowSizeClass();
-				updateNavbar();
+				updateView();
 				
 				setSize(applicationSize);
 				revalidate();
@@ -44,11 +42,12 @@ abstract public class Application extends GPanel {
 	}
 	
 	protected void updateWindowSizeClass() {
-		windowSizeClasse = windowSizeClassManager.determineWindowSizeClass(applicationSize);
+		windowSizeClass = windowSizeClassManager.determineWindowSizeClass(applicationSize);
 	}
 	
-	protected void updateNavbar() {
-		navbar = navbarManager.determineNavbar(windowSizeClasse);
+	protected void updateView() {
+		view = viewManager.determineView(windowSizeClass);
+		view.update(applicationSize);
 	}
 	
 	public void start() {
@@ -60,7 +59,7 @@ abstract public class Application extends GPanel {
 	 */
 	public void start(GPElement element) {
 		updateWindowSizeClass();
-		updateNavbar();
+		updateView();
 		
 		
 		setSize(applicationSize);

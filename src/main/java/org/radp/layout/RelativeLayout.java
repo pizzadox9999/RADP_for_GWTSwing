@@ -313,7 +313,7 @@ public class RelativeLayout implements GLayoutManager {
 	 * each row in the container, plus the vertical padding times the number of rows
 	 * minus one, plus the top and bottom insets of the target container.
 	 *
-	 * @param target the container in which to do the layout
+	 * @param parent the container in which to do the layout
 	 * @return the preferred dimensions to lay out the subcomponents of the
 	 *         specified container
 	 * @see java.awt.RelativeLayout#minimumLayoutSize
@@ -337,7 +337,7 @@ public class RelativeLayout implements GLayoutManager {
 	 * row in the container, plus the vertical padding times the number of rows
 	 * minus one, plus the top and bottom insets of the target container.
 	 *
-	 * @param target the container in which to do the layout
+	 * @param parent the container in which to do the layout
 	 * @return the minimum dimensions needed to lay out the subcomponents of the
 	 *         specified container
 	 * @see java.awt.RelativeLayout#preferredLayoutSize
@@ -361,7 +361,7 @@ public class RelativeLayout implements GLayoutManager {
 	 * equals the container's size minus any insets and any specified horizontal or
 	 * vertical gap. All components in a grid layout are given the same size.
 	 *
-	 * @param target the container in which to do the layout
+	 * @param parent the container in which to do the layout
 	 * @see java.awt.Container
 	 * @see java.awt.Container#doLayout
 	 */
