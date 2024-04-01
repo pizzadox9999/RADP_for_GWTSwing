@@ -1,4 +1,4 @@
-package org.radp.application.impl;
+package org.radp.test;
 
 import org.radp.application.WindowSizeClassManager;
 import org.radp.application.WindowSizeClasses;

@@ -3,15 +3,18 @@ package org.radp.application;
 import org.radp.RADP;
 import org.radp.event.ResizeEvent;
 import org.radp.event.ResizeEventListener;
+import org.radp.laf.material.MaterialLookAndFeel;
 
 import de.exware.gplatform.GPElement;
 import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.teavm.TeavmGPlatform;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GToolkit;
 import de.exware.gwtswing.swing.GPanel;
+import de.exware.gwtswing.swing.GUIManager;
 import de.exware.gwtswing.swing.GUtilities;
 
-abstract public class Application extends GPanel {
+abstract public class Application {
 	protected WindowSizeClasses windowSizeClass;
 	protected WindowSizeClassManager windowSizeClassManager;
 	
@@ -23,6 +26,7 @@ abstract public class Application extends GPanel {
 	protected GDimension applicationSize = null;
 	
 	protected Application() {
+		GUIManager.setLookAndFeel(new MaterialLookAndFeel());
 		applicationSize = GToolkit.getDefaultToolkit().getScreenSize();
 		
 		RADP.init();
@@ -33,8 +37,10 @@ abstract public class Application extends GPanel {
 				updateWindowSizeClass();
 				updateView();
 				
-				setSize(applicationSize);
-				revalidate();
+				view.getComponent().setSize(applicationSize);
+				view.getComponent().revalidate();
+				
+				view.resized(applicationSize);
 			}
 		};
 		
@@ -46,29 +52,34 @@ abstract public class Application extends GPanel {
 	}
 	
 	protected void updateView() {
-		view = viewManager.determineView(windowSizeClass);
-		view.update(applicationSize);
-	}
-	
-	public void start() {
-		start(GPlatform.getDoc().getBody());
+		View oldView = view;
+		View newView = viewManager.determineView(windowSizeClass);
+		
+		if(oldView != newView) {
+			if(oldView != null) {
+				oldView.deactived();
+				oldView.getComponent().getPeer().removeFromParent();
+			}
+			
+			if(newView != null) {
+				newView.activated();
+				GUtilities.addToWidget(GPlatform.getDoc().getBody(), newView.getComponent());
+			}
+			
+			view = newView;
+		}
 	}
 	
 	/**
 	 * if this method is called everything is setup
 	 */
-	public void start(GPElement element) {
+	public void start() {
+		applicationSize = GToolkit.getDefaultToolkit().getScreenSize();
 		updateWindowSizeClass();
 		updateView();
 		
-		
-		setSize(applicationSize);
-		//attach chat application to parent
-		GUtilities.addToWidget(element, this);
-		validate();
-	}
-	
-	public void shutdown() {
-		getPeer().removeFromParent();
+		view.getComponent().setSize(applicationSize);
+		view.getComponent().setVisible(true);
+		view.getComponent().validate();
 	}
 }
