@@ -2,19 +2,23 @@ package org.radp.test;
 
 import org.radp.application.SinglePageApplication;
 
-import de.exware.gwtswing.swing.GPanel;
-
-class NameInformationPanel extends GPanel {
-	public NameInformationPanel() {
-		
-	}
-}
-
 public class ChatApplication extends SinglePageApplication {
-	public ChatApplication() {
-		super();
+	public static final String CHAT_SELECTION = "CHAT_SELECTION";
+	
+	@Override
+	public void setupManager() {
 		windowSizeClassManager = new MaterialWindowSizeClassManager();
 		viewManager = new MaterialViewManager();
-		
 	}
+
+	@Override
+	public void setupComponentStore() {
+		ComponentStore store = ComponentStore.getInstance();
+		
+		ChatSelectionArea chatSelection = new ChatSelectionArea();
+		
+		store.put(CHAT_SELECTION, chatSelection);
+	}
+
+	
 }

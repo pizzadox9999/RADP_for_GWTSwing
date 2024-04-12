@@ -89,6 +89,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>3.3.2</version>
         <configuration>
+          <webappDirectory>/srv/http/</webappDirectory>
           <webResources>
             <resource>
               <directory>${project.build.directory}/generated/js</directory>

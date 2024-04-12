@@ -1,6 +1,7 @@
 package org.radp;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import org.radp.event.ResizeEvent;
 import org.radp.event.ResizeEventListener;
@@ -13,6 +14,7 @@ import org.teavm.jso.dom.events.EventListener;
 import de.exware.gplatform.GPElement;
 import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.GDimension;
+import de.exware.gwtswing.awt.GLayoutManager;
 import de.exware.gwtswing.awt.GToolkit;
 import de.exware.gwtswing.swing.GComponent;
 import de.exware.gwtswing.swing.GLabel;
@@ -62,7 +64,11 @@ public abstract class RADP {
 	}
 
 	public static GPanel wrapComponentsInPanel(GComponent... component) {
-		GPanel panel = new GPanel(new VerticalFlowLayout());
+		return wrapComponentsInPanel(new VerticalFlowLayout(), component);
+	}
+	
+	public static GPanel wrapComponentsInPanel(GLayoutManager layoutManager, GComponent... component) {
+		GPanel panel = new GPanel(layoutManager);
 		for (GComponent c : component) {
 			panel.add(c);
 		}
@@ -118,18 +124,27 @@ public abstract class RADP {
 	public static GComponent getAncestorOfClass(Class<?> c, GComponent comp) {
 		if (comp == null || c == null)
 			return null;
-		
+
 		GComponent parent = comp.getParent();
 		while (parent != null && !(c.isInstance(parent)))
 			parent = parent.getParent();
 		return parent;
 	}
-	
+
 	public static <T> T checkNullWithDefault(Object object, T onNull) {
-		if(object == null) {
+		if (object == null) {
 			return onNull;
 		} else {
 			return (T) object;
+		}
+	}
+
+	public static void walkComponentTree(GComponent c, Consumer<GComponent> consumer) {
+		if (c != null) {
+			consumer.accept(c);
+			for (GComponent component : c.getComponents()) {
+				walkComponentTree(component, consumer);
+			}
 		}
 	}
 

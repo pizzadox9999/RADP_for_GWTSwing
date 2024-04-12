@@ -74,6 +74,11 @@ abstract public class Application {
 	 * if this method is called everything is setup
 	 */
 	public void start() {
+		//user setup
+		setupManager();
+		setupComponentStore();
+		
+		//application setup
 		applicationSize = GToolkit.getDefaultToolkit().getScreenSize();
 		updateWindowSizeClass();
 		updateView();
@@ -82,4 +87,7 @@ abstract public class Application {
 		view.getComponent().setVisible(true);
 		view.getComponent().validate();
 	}
+	
+	abstract public void setupManager();
+	abstract public void setupComponentStore();
 }

@@ -15,6 +15,7 @@ public class ExpandedMaterialView implements View {
 	public void init() {
 		panel = new GPanel(new VerticalFlowLayout());
 		panel.add(new GLabel("expanded material view"));
+		
 	}
 
 	@Override
