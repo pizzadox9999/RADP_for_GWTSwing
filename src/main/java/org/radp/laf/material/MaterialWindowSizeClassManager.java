@@ -1,7 +1,7 @@
-package org.radp.test;
+package org.radp.laf.material;
 
+import org.radp.application.WindowSizeClass;
 import org.radp.application.WindowSizeClassManager;
-import org.radp.application.WindowSizeClasses;
 
 import de.exware.gwtswing.awt.GDimension;
 
@@ -12,21 +12,21 @@ public class MaterialWindowSizeClassManager implements WindowSizeClassManager {
 	public static final int LARGE = 1600;
 	
 	@Override
-	public WindowSizeClasses determineWindowSizeClass(GDimension windowSize) {
-		WindowSizeClasses windowSizeClass = null;
+	public WindowSizeClass determineWindowSizeClass(GDimension windowSize) {
+		WindowSizeClass windowSizeClass = null;
 		
 		int width = windowSize.width;
 		
 		if(width < COMPACT) {
-			windowSizeClass = WindowSizeClasses.COMPACT;
+			windowSizeClass = MaterialWindowSizeClasses.COMPACT;
 		} else if(width >= COMPACT && width < MEDIUM) {
-			windowSizeClass = WindowSizeClasses.MEDIUM;
+			windowSizeClass = MaterialWindowSizeClasses.MEDIUM;
 		} else if(width >= MEDIUM && width < EXPANED)  {
-			windowSizeClass = WindowSizeClasses.EXPANED;
+			windowSizeClass = MaterialWindowSizeClasses.EXPANED;
 		} else if(width >= EXPANED && width < LARGE)  {
-			windowSizeClass = WindowSizeClasses.LARGE;
+			windowSizeClass = MaterialWindowSizeClasses.LARGE;
 		} else if(width >= LARGE)  {
-			windowSizeClass = WindowSizeClasses.EXTRA_LARGE;
+			windowSizeClass = MaterialWindowSizeClasses.EXTRA_LARGE;
 		}
 		
 		return windowSizeClass;

@@ -1,17 +1,15 @@
 package org.radp.application;
 
-import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.swing.GComponent;
 
-public interface View {
+public class View extends GComponent{
+	private boolean isActive = false;
 	
-	public void init();
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 	
-	public void activated();
-	
-	public void deactived();
-	
-	public void resized(GDimension windowSize);
-
-	public GComponent getComponent();
+	public boolean isActive() {
+		return isActive;
+	}
 }

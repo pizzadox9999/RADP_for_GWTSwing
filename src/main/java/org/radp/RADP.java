@@ -147,6 +147,23 @@ public abstract class RADP {
 			}
 		}
 	}
+	
+	public static void executeAsynchron(Runnable runnable) {
+		Thread thread = new Thread(runnable);
+		thread.start();
+	}
+	
+	public static void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static void sleep(int seconds) {
+		sleep(((long) seconds * 1000));
+	}
 
 	/******** NATIVE ********/
 	@JSBody(params = {}, script = "return navigator.language || navigator.userLanguage;")

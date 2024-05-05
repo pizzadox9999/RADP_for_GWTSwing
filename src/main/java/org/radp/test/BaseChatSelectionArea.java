@@ -1,5 +1,6 @@
 package org.radp.test;
 
+import java.util.ArrayList;
 import java.util.function.Function;
 
 import org.radp.component.GBox;
@@ -8,15 +9,15 @@ import org.radp.layout.GBoxLayout;
 import org.radp.layout.GFlowLayout;
 
 import de.exware.gwtswing.awt.GBorderLayout;
-import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GFont;
+import de.exware.gwtswing.awt.event.GMouseAdapter;
+import de.exware.gwtswing.awt.event.GMouseEvent;
 import de.exware.gwtswing.swing.GComponent;
 import de.exware.gwtswing.swing.GIcon;
 import de.exware.gwtswing.swing.GImageIcon;
 import de.exware.gwtswing.swing.GLabel;
-import de.exware.gwtswing.swing.GList;
-import de.exware.gwtswing.swing.GListCellRenderer;
+import de.exware.gwtswing.swing.GListModel;
 import de.exware.gwtswing.swing.GPanel;
 import de.exware.gwtswing.swing.GScrollPane;
 import de.exware.gwtswing.swing.GSwingConstants;
@@ -60,21 +61,45 @@ class Chat extends GComponent {
 	}
 }
 
-public class ChatSelectionArea extends GScrollPane {
-	private GComponent view;
+public class BaseChatSelectionArea extends GScrollPane {
+	protected SimpleEventListenerSupport chatSelectedEventListeners = new SimpleEventListenerSupport();
+	protected GComponent view;
 
-	public ChatSelectionArea() {
+	public BaseChatSelectionArea() {
 		super(null);
 
 		setBorder(new GEmptyBorder(0, 0, 0, 0));
 		view = new GBox(GBoxLayout.Y_AXIS);
 		setViewportView(view);
-
+		
 		for (int i = 0; i < 100; i++) {
 			view.add(generateTestComponent(i + 1));
 		}
-
-		System.out.println("components generated");
+	}
+	
+	public void addChat(Chat chat) {
+		view.add(chat);
+		chat.addMouseListener(new GMouseAdapter() {
+			@Override
+			public void mouseClicked(GMouseEvent evt) {
+				chatSelectedEventListeners.fireSimpleEventListeners();
+			}
+		});
+	}
+	
+	public void addChats(ArrayList<Chat> chats) {
+		for(Chat chat : chats) {
+			view.add(chat);
+		}
+	}
+	
+	public void setChats(ArrayList<Chat> chats) {
+		view.removeAll();
+		addChats(chats);
+	}
+	
+	public void addChatSelectedEventListener(SimpleEventListener chatSelectedEventListener) {
+		chatSelectedEventListeners.addSimpleEventListener(chatSelectedEventListener);
 	}
 
 	public static final GComponent generateTestComponent(int number) {

@@ -5,89 +5,100 @@ import org.radp.event.ResizeEvent;
 import org.radp.event.ResizeEventListener;
 import org.radp.laf.material.MaterialLookAndFeel;
 
-import de.exware.gplatform.GPElement;
-import de.exware.gplatform.GPlatform;
-import de.exware.gplatform.teavm.TeavmGPlatform;
-import de.exware.gwtswing.awt.GDimension;
+import de.exware.gplatform.timer.AbstractGPTimerTask;
+import de.exware.gplatform.timer.GPTimer;
 import de.exware.gwtswing.awt.GToolkit;
-import de.exware.gwtswing.swing.GPanel;
+import de.exware.gwtswing.swing.GComponent;
 import de.exware.gwtswing.swing.GUIManager;
 import de.exware.gwtswing.swing.GUtilities;
 
+/**
+ * Simple base class for an GWTSwing application.
+ */
 abstract public class Application {
-	protected WindowSizeClasses windowSizeClass;
+	protected WindowSizeClass windowSizeClass;
 	protected WindowSizeClassManager windowSizeClassManager;
-	
-	protected View view;
-	protected ViewManager viewManager;
-	
+
+	protected GComponent layout;
+
 	protected ResizeEventListener resizeEventListener;
 	
-	protected GDimension applicationSize = null;
+	protected GPTimer timer = GPTimer.createInstance();
+	
+	Thread thread = null;
+	
+	Object lock = new Object();
 	
 	protected Application() {
 		GUIManager.setLookAndFeel(new MaterialLookAndFeel());
-		applicationSize = GToolkit.getDefaultToolkit().getScreenSize();
-		
+
 		RADP.init();
 		resizeEventListener = new ResizeEventListener() {
 			@Override
 			public void resized(ResizeEvent resizeEvent) {
-				applicationSize = resizeEvent.newDimension;
-				updateWindowSizeClass();
-				updateView();
-				
-				view.getComponent().setSize(applicationSize);
-				view.getComponent().revalidate();
-				
-				view.resized(applicationSize);
+				if(thread == null) {
+					thread = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							RADP.sleep(3);
+							updateWindowSizeClass();
+							if (layout != null) {
+								layout.setSize(resizeEvent.newDimension);
+								layout.revalidate();
+							}
+						}
+					});
+					thread.start();
+				} else {
+					//terminate thread
+					thread.interrupt();
+				}
 			}
 		};
-		
+
 		RADP.addResizeEventListener(resizeEventListener);
 	}
-	
+
 	protected void updateWindowSizeClass() {
-		windowSizeClass = windowSizeClassManager.determineWindowSizeClass(applicationSize);
-	}
-	
-	protected void updateView() {
-		View oldView = view;
-		View newView = viewManager.determineView(windowSizeClass);
-		
-		if(oldView != newView) {
-			if(oldView != null) {
-				oldView.deactived();
-				oldView.getComponent().getPeer().removeFromParent();
+		WindowSizeClass oldWindowSizeClass = windowSizeClass;
+		WindowSizeClass newWindowSizeClass = windowSizeClassManager
+				.determineWindowSizeClass(GToolkit.getDefaultToolkit().getScreenSize());
+		if (oldWindowSizeClass != newWindowSizeClass) {
+			windowSizeClass = newWindowSizeClass;
+			if(layout != null) {
+				layout.setVisible(false);
+				layout.getPeer().removeFromParent();
 			}
-			
-			if(newView != null) {
-				newView.activated();
-				GUtilities.addToWidget(GPlatform.getDoc().getBody(), newView.getComponent());
+			changeLayout();
+			if(layout != null) {
+				GUtilities.addToBody(layout);
+				layout.setVisible(true);
 			}
-			
-			view = newView;
 		}
 	}
-	
+
+	/**
+	 * changeLayout is called, when the window size class has changed, to accommodate
+	 * for the new window size class, so that the user can have a pleasant layout.
+	 */
+	abstract protected void changeLayout();
+
 	/**
 	 * if this method is called everything is setup
 	 */
 	public void start() {
-		//user setup
-		setupManager();
-		setupComponentStore();
-		
-		//application setup
-		applicationSize = GToolkit.getDefaultToolkit().getScreenSize();
+		// do some safty checks
+		if (windowSizeClassManager == null) {
+			throw new Error("No WindowSizeClassManager is set! Exiting application.");
+		}
+
+		// application setup
 		updateWindowSizeClass();
-		updateView();
-		
-		view.getComponent().setSize(applicationSize);
-		view.getComponent().setVisible(true);
-		view.getComponent().validate();
+
+		// start application by updating view and validating it.
+		if (layout != null) {
+			layout.setSize(GToolkit.getDefaultToolkit().getScreenSize());
+			layout.validate();
+		}
 	}
-	
-	abstract public void setupManager();
-	abstract public void setupComponentStore();
 }
