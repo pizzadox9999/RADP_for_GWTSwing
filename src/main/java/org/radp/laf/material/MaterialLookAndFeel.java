@@ -6,6 +6,7 @@ import de.exware.gwtswing.awt.event.GAWTEventListener;
 import de.exware.gwtswing.awt.event.GContainerEvent;
 import de.exware.gwtswing.swing.GComponent;
 import de.exware.gwtswing.swing.GLookAndFeel;
+import de.exware.gwtswing.swing.GUIManager;
 import de.exware.gwtswing.swing.plaf.GUIDefaults;
 
 public class MaterialLookAndFeel extends GLookAndFeel {
@@ -21,8 +22,12 @@ public class MaterialLookAndFeel extends GLookAndFeel {
 		return uiDefaults;
 	}
 	
-	public void setSkin() {
-		
+	/**
+	 * Sets skin values on to the MaterialUIDefaults.
+	 * @param materialSkin
+	 */
+	public void setSkin(MaterialSkin materialSkin) {
+		materialSkin.applySkin();
 	}
 
 	@Override
@@ -31,11 +36,12 @@ public class MaterialLookAndFeel extends GLookAndFeel {
     	//component gets his laf is to add an component listener
 		//this will update the ui every time a component is added to a container
 		//of the component added to the container
+		//but this implementation is insufficient for Material3
+		//there is need for an update every time a UIDefault has
+		//changed
     	installLookAndFeelEventListener = new GAWTEventListener() {
 			@Override
 			public void eventDispatched(GAWTEvent event) {
-				System.out.println("container event fired");
-				//GComponent component = (GComponent) event.getSource();
 				if(event instanceof GContainerEvent) {
 					GComponent component = ((GContainerEvent) event).getChild();
 					component.updateUI();
@@ -45,7 +51,6 @@ public class MaterialLookAndFeel extends GLookAndFeel {
 		};
 		
 		GToolkit.getDefaultToolkit().addAWTEventListener(installLookAndFeelEventListener, GAWTEvent.CONTAINER_EVENT_MASK);
-		System.out.println("registered container event listener");
 	}
 
 	@Override
